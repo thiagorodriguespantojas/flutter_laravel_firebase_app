@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www
+    ports:
+      - "8001:8000"
+    depends_on:
+      - db
+    environment:
+      - APP_ENV=hml
+      - DB_HOST=db
+      - DB_DATABASE=agendamento_hml
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+    command: php artisan serve --host=0.0.0.0 --port=8000
+
+  db:
+    image: mysql:8
+    restart: always
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: agendamento_hml
+      MYSQL_ROOT_PASSWORD: root
+
+volumes:
+  db_data:

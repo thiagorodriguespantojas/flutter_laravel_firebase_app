@@ -1,0 +1,39 @@
+name: Laravel CI/CD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Instalar dependências
+        run: |
+          cd backend_laravel
+          composer install --no-dev --optimize-autoloader
+
+      - name: Copiar .env de produção
+        run: cp .env.prod backend_laravel/.env
+
+      - name: Key generate
+        run: |
+          cd backend_laravel
+          php artisan key:generate
+
+      - name: Executar Migrations
+        run: |
+          cd backend_laravel
+          php artisan migrate --force
+
+      - name: Deploy pronto
+        run: echo "🚀 Deploy finalizado com sucesso!"
