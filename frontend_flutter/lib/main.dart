@@ -1,0 +1,1 @@
+void main() => print('Flutter app carregado');
